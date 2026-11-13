@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Cartoon App Example — Adams Red Ink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff6e9; --bg2:#ffeecf; --paper:#fffdf8; --paper2:#fff3d6;
+  --ink:#1c1714; --ink2:#5c524c; --line:#1c1714;
+  --red:#d92e2e; --red-dark:#b91f1f; --yellow:#ffc531; --teal:#0f766e; --blue:#2563eb;
+  --card:#ffffff; --muted:#f3e9d7; --shadow:0 20px 50px rgba(28,23,20,.16);
+  --phone-bg:#fffdf8;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#171211; --bg2:#221817; --paper:#221c19; --paper2:#2c231f;
+    --ink:#fff6e9; --ink2:#d8c9bc; --line:#fff6e9;
+    --card:#2a2220; --muted:#332a27; --shadow:0 20px 50px rgba(0,0,0,.5);
+    --phone-bg:#1e1917;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,sans-serif;line-height:1.5;
+  background-image:radial-gradient(color-mix(in srgb, var(--ink) 7%, transparent) 1.2px, transparent 1.3px);background-size:22px 22px;}
+a{color:inherit}
+.top{max-width:1180px;margin:0 auto;padding:28px 20px 10px}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:999px}
+.pill i{width:8px;height:8px;background:var(--yellow);border-radius:50%;display:block}
+.hero{max-width:1180px;margin:0 auto;padding:10px 20px 34px;display:grid;grid-template-columns:1.02fr .98fr;gap:42px;align-items:start}
+h1{font-family:"Baloo 2",cursive;font-size:clamp(42px,6vw,74px);line-height:.92;letter-spacing:-.02em;margin:18px 0 16px}
+h1 em{font-style:normal;color:var(--red);position:relative;white-space:nowrap}
+h1 em:after{content:"";position:absolute;left:0;right:0;bottom:2px;height:10px;background:var(--yellow);z-index:-1;border-radius:999px;transform:rotate(-1deg)}
+.lede{font-size:19px;color:var(--ink2);max-width:560px;margin:0 0 20px}
+.lede strong{color:var(--ink)}
+.try-box{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:18px 18px 14px;box-shadow:6px 6px 0 var(--line);max-width:560px}
+.try-box h3{font-family:"Patrick Hand",cursive;font-size:22px;margin:0 0 8px}
+.try-box ol{margin:0;padding-left:20px;color:var(--ink2);font-weight:600}
+.try-box li{margin:6px 0}
+.try-box li b{color:var(--ink)}
+.quick-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.stat{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;min-width:118px}
+.stat b{font-family:"Baloo 2";font-size:20px;display:block;line-height:1}
+.stat span{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+/* PHONE */
+.phone-wrap{position:relative}
+.phone-wrap:before{content:"← tap around in here!";font-family:"Patrick Hand",cursive;font-size:22px;color:var(--red);position:absolute;top:-34px;right:12px;transform:rotate(3deg)}
+.phone{background:#111;border:3px solid #111;border-radius:52px;padding:11px;box-shadow:var(--shadow);max-width:420px;margin:0 auto;position:sticky;top:18px}
+.phone-screen{background:var(--phone-bg);border-radius:42px;overflow:hidden;display:flex;flex-direction:column;height:740px;position:relative}
+.notch{height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:11px;font-weight:800}
+.notch b{background:#111;color:#fff;padding:3px 14px;border-radius:999px;font-size:10px;letter-spacing:.08em}
+@media (prefers-color-scheme: dark){.notch b{background:#fff;color:#111}}
+.app-head{padding:8px 18px 12px;border-bottom:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--paper)}
+.brand{font-family:"Baloo 2";font-weight:800;line-height:1}
+.brand small{display:block;font-family:"Nunito";font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);font-weight:900}
+.brand span{font-size:22px}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--yellow);border:2px solid var(--line);display:grid;place-items:center;font-family:"Patrick Hand";font-size:20px}
+.screen-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 18px;scrollbar-width:none}
+.screen-scroll::-webkit-scrollbar{display:none}
+.view{display:none;animation:in .25s ease}
+.view.active{display:block}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.view{animation:none}}
+.featured{border:2px solid var(--line);border-radius:20px;overflow:hidden;background:#ffef9f;color:#1c1714;box-shadow:4px 4px 0 var(--line)}
+.featured-art{padding:14px 14px 0}
+.featured-body{padding:12px 16px 16px}
+.kicker{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.featured h2{font-family:"Baloo 2";font-size:28px;line-height:1;margin:6px 0 6px}
+.featured p{margin:0 0 12px;font-weight:600;color:#4a3f35}
+.btn{appearance:none;border:2px solid var(--line);background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:999px;font-weight:900;font-family:"Nunito";cursor:pointer;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.btn.red{background:var(--red);color:white;border-color:#1c1714}
+.btn.light{background:var(--paper);color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.btn.small{padding:8px 12px;font-size:13px}
+.sec-title{font-family:"Baloo 2";font-size:20px;margin:20px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
+.sec-title span{font-family:"Nunito";font-size:12px;font-weight:800;color:var(--ink2)}
+.continue{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:13px;display:flex;gap:12px;align-items:center}
+.thumb{width:62px;height:62px;flex:0 0 62px;border-radius:12px;border:2px solid var(--line);display:grid;place-items:center;font-size:28px;background:var(--paper2)}
+.continue b{display:block;line-height:1.2}
+.continue small{color:var(--ink2);font-weight:700}
+.bar{height:8px;background:var(--muted);border-radius:999px;overflow:hidden;margin-top:8px;border:1px solid color-mix(in srgb, var(--line) 25%, transparent)}
+.bar i{display:block;height:100%;background:var(--red);border-radius:999px}
+.ep-list{display:grid;gap:10px}
+.ep{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:11px;cursor:pointer;color:inherit;font-family:inherit}
+.ep:hover{border-color:var(--red)}
+.ep .thumb{width:58px;height:58px;flex-basis:58px;font-size:26px}
+.ep b{display:block;line-height:1.2;font-size:15px}
+.ep small{color:var(--ink2);font-weight:700;line-height:1.3;display:block}
+.ep .num{margin-left:auto;font-family:"Baloo 2";color:var(--ink2);font-size:13px;white-space:nowrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.chip{border:1.5px solid var(--line);background:var(--paper);padding:7px 10px;border-radius:999px;font-weight:800;font-size:12px;cursor:pointer;color:inherit}
+.chip.on{background:var(--yellow);color:#1c1714}
+/* Reader */
+.reader-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.reader-head b{font-family:"Baloo 2";font-size:18px;line-height:1.1}
+.panel{border:2.5px solid var(--line);border-radius:18px;background:#fffdf6;color:#1c1714;overflow:hidden;box-shadow:4px 4px 0 var(--line)}
+.panel-art{padding:10px;background:#fff}
+.panel-caption{padding:13px 14px 15px;border-top:2px solid #1c1714;background:#fff8d6}
+.panel-caption p{margin:0;font-weight:700;line-height:1.45}
+.bubble{display:inline-block;background:#fff;border:2px solid #1c1714;border-radius:16px;padding:7px 10px;font-family:"Patrick Hand";font-size:18px;line-height:1.2;margin-bottom:8px;position:relative}
+.reader-controls{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px}
+.dots{display:flex;gap:6px}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line);background:transparent}
+.dots i.on{background:var(--red)}
+.actions{display:flex;gap:8px;margin-top:12px}
+.action{flex:1;border:1.5px solid var(--line);background:var(--card);color:inherit;border-radius:12px;padding:10px;font-weight:900;cursor:pointer;font-family:inherit}
+.action.liked{background:#ffe1e1;color:#b91f1f}
+/* Characters */
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.char{border:1.5px solid var(--line);border-radius:16px;padding:12px;background:var(--card);cursor:pointer;text-align:left;color:inherit;font-family:inherit}
+.char .face{width:56px;height:56px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:28px;margin-bottom:8px}
+.char b{display:block;line-height:1.2}
+.char small{color:var(--ink2);font-weight:700}
+.char-detail{margin-top:12px;border:2px dashed var(--line);border-radius:16px;padding:14px;background:var(--paper2)}
+.char-detail h3{font-family:"Baloo 2";margin:0 0 4px}
+.char-detail p{margin:0;color:var(--ink2);font-weight:600}
+/* Extras */
+.step{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed color-mix(in srgb, var(--line) 35%, transparent)}
+.step:last-child{border:none}
+.step-n{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-family:"Baloo 2";flex:0 0 36px;background:var(--yellow);color:#1c1714}
+.step b{display:block}
+.step p{margin:2px 0 0;color:var(--ink2);font-weight:600;font-size:14px}
+.note{background:#dcfce7;color:#14532d;border:1.5px solid #14532d;border-radius:14px;padding:12px 13px;font-weight:700;font-size:14px;margin-top:14px}
+@media (prefers-color-scheme: dark){.note{background:#123324;color:#bbf7d0;border-color:#4ade80}}
+/* Bottom nav */
+.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--line);background:var(--paper);padding:8px 8px 12px;gap:4px}
+.nav-btn{border:none;background:transparent;color:var(--ink2);font-family:inherit;font-weight:900;font-size:11px;padding:8px 4px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav-btn span{font-size:20px;line-height:1}
+.nav-btn.on{background:var(--ink);color:var(--bg)}
+/* Below fold */
+.section{max-width:1180px;margin:0 auto;padding:26px 20px}
+.section h2{font-family:"Baloo 2";font-size:clamp(30px,4vw,44px);line-height:1;margin:0 0 10px}
+.section .sub{color:var(--ink2);font-size:17px;max-width:720px;margin:0 0 20px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.step-card{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:18px;box-shadow:5px 5px 0 var(--line)}
+.step-card .no{font-family:"Patrick Hand";font-size:28px;color:var(--red)}
+.step-card h3{font-family:"Baloo 2";margin:4px 0 6px;font-size:21px}
+.step-card p{margin:0;color:var(--ink2);font-weight:600}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel-box{border:2px solid var(--line);border-radius:18px;padding:20px;background:var(--paper)}
+.panel-box.red{background:var(--red);color:white;border-color:var(--line)}
+.panel-box.red p,.panel-box.red li{color:#ffe4e4}
+.panel-box h3{font-family:"Baloo 2";font-size:24px;margin:0 0 10px}
+.panel-box ul{margin:0;padding-left:18px;font-weight:700}
+.panel-box li{margin:7px 0;color:var(--ink2)}
+.panel-box p{color:var(--ink2);font-weight:600}
+.faq{display:grid;gap:10px}
+.faq details{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px}
+.faq summary{font-weight:900;cursor:pointer;font-family:"Baloo 2";font-size:17px}
+.faq p{color:var(--ink2);font-weight:600;margin:8px 0 0}
+.footer{max-width:1180px;margin:0 auto;padding:10px 20px 36px;color:var(--ink2);font-weight:700;font-size:14px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hand{font-family:"Patrick Hand"}
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .phone{position:relative;top:0}
+  .phone-screen{height:700px}
+  .steps,.split{grid-template-columns:1fr}
+  .phone-wrap:before{top:-28px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="pill"><i></i> Example preview · Adams Red Ink</span>
+</header>
+
+<main>
+  <div class="hero">
+    <div>
+      <h1>Your cartoon,<br>as <em>an app.</em></h1>
+      <p class="lede">This is a <strong>playable example</strong> of what your cartoon could look like on a phone — before you've finished the drawing. The panels inside are simple placeholders. When your real pages are done, they drop straight into these same frames.</p>
+
+      <div class="try-box">
+        <h3>✎ Try it in 20 seconds:</h3>
+        <ol>
+          <li>Tap <b>Read</b> at the bottom of the phone</li>
+          <li>Pick <b>“Blubb! A Very Bubbly Day”</b></li>
+          <li>Tap <b>Next panel →</b> to read it like a reader would</li>
+          <li>Then peek at <b>Cast</b> and <b>Extras</b></li>
+        </ol>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat"><b>4</b><span>Example episodes</span></div>
+        <div class="stat"><b>4 panels</b><span>Per mini-story</span></div>
+        <div class="stat"><b>0</b><span>Drawings needed yet</span></div>
+      </div>
+
+      <p class="hand" style="font-size:20px;color:var(--red);margin-top:20px;transform:rotate(-1deg)">Your art goes in the frames — the app just gives it a home, an audience, and a “next episode” button.</p>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone" aria-label="Interactive example of a cartoon app on a phone">
+        <div class="phone-screen">
+          <div class="notch"><span>9:41</span><b>EXAMPLE APP</b><span>▰▰▰</span></div>
+          <div class="app-head">
+            <div class="brand"><small>Adams Red Ink presents</small><span>Rosa's Toons</span></div>
+            <div class="avatar" title="Rosa">R✎</div>
+          </div>
+
+          <div class="screen-scroll" id="scrollArea">
+            <!-- HOME -->
+            <section class="view active" id="view-home">
+              <div class="featured">
+                <div class="featured-art" id="featuredArt"></div>
+                <div class="featured-body">
+                  <div class="kicker">★ Featured this week</div>
+                  <h2>Blubb! A Very Bubbly Day</h2>
+                  <p>One tiny bubble. One very big adventure across the city. A 4-panel mini-story to try the reader.</p>
+                  <button class="btn red" onclick="openEpisode(1)">▶ Start reading</button>
+                  <button class="btn light small" onclick="go('library')">All episodes</button>
+                </div>
+              </div>
+
+              <div class="sec-title">Continue reading <span>Tap to resume</span></div>
+              <div class="continue" onclick="openEpisode(0)" style="cursor:pointer">
+                <div class="thumb">🚌</div>
+                <div style="flex:1">
+                  <b>The Bus That Wouldn't Wait</b>
+                  <small>Panel 3 of 4 · 1 minute left</small>
+                  <div class="bar"><i style="width:68%"></i></div>
+                </div>
+                <span style="font-size:22px">›</span>
+              </div>
+
+              <div class="sec-title">New &amp; loved</div>
+              <div class="ep-list" id="homeList"></div>
+
+              <div class="note">🔔 In the real version, readers could get a gentle ping when you post a new strip — no spam, just “new Rosa just dropped.”</div>
+            </section>
+
+            <!-- LIBRARY -->
+            <section class="view" id="view-library">
+              <div class="kicker" style="color:var(--red)">The library</div>
+              <h2 style="font-family:'Baloo 2';font-size:28px;line-height:1;margin:6px 0 4px">All episodes</h2>
+              <p style="margin:0;color:var(--ink2);font-weight:700">Example titles — yours will replace these when you're ready.</p>
+              <div class="chips" id="chips">
+                <button class="chip on" data-filter="all">All</button>
+                <button class="chip" data-filter="city">City life</button>
+                <button class="chip" data-filter="cozy">Cozy</button>
+                <button class="chip" data-filter="silly">Silly</button>
+              </div>
+              <div class="ep-list" id="libraryList"></div>
+            </section>
+
+            <!-- READER -->
+            <section class="view" id="view-reader">
+              <div class="reader-head">
+                <button class="btn light small" onclick="go('library')">← Library</button>
+                <span style="font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)" id="panelCounter">Panel 1 / 4</span>
+              </div>
+              <b id="readerTitle" style="font-family:'Baloo 2';font-size:22px;line-height:1.1;display:block;margin-bottom:10px">Blubb! A Very Bubbly Day</b>
+              <div class="panel">
+                <div class="panel-art" id="panelArt"></div>
+                <div class="panel-caption">
+                  <span class="bubble" id="panelBubble">“Just one little bubble…”</span>
+                  <p id="panelCaption"></p>
+                </div>
+              </div>
+              <div class="reader-controls">
+                <button class="btn light small" id="prevBtn" onclick="movePanel(-1)">← Prev</button>
+                <div class="dots" id="dots"></div>
+                <button class="btn red small" id="nextBtn" onclick="movePanel(1)">Next panel →</button>
+              </div>
+              <div class="actions">
+                <button class="action" id="likeBtn" onclick="toggleLike()">♡ &nbsp;Love it</button>
+                <button class="action" onclick="finishEpisode()">✓ Mark finished</button>
+              </div>
+              <p id="readerMsg" class="hand" style="font-size:19px;color:var(--red);min-height:26px;margin:10px 0 0"></p>
+            </section>
+
+            <!-- CAST -->
+            <section class="view" id="view-cast">
+              <div class="kicker" style="color:var(--red)">Meet the cast</div>
+              <h2 style="font-family:'Baloo 2';font-size:28px;line-height:1;margin:6px 0 6px">Your characters get profiles</h2>
+              <p style="margin:0 0 14px;color:var(--ink2);font-weight:700">Tap a character. In the real app, these would be drawn from your sketchbook.</p>
+              <div class="char-grid" id="charGrid"></div>
+              <div class="char-detail" id="charDetail"></div>
+            </section>
+
+            <!-- EXTRAS (uses cast nav? we have 4 nav items, extras inside home scroll link) -->
+            <section class="view" id="view-extras">
+              <div class="kicker" style="color:var(--red)">Behind the ink</div>
+              <h2 style="font-family:'Baloo 2';font-size:28px;line-height:1;margin:6px 0 6px">From sketch to phone</h2>
+              <p style="margin:0;color:var(--ink2);font-weight:700">This is the part readers love — and it matches how you already work, pencil first.</p>
+              <div id="stepsList">
+                <div class="step"><div class="step-n">1</div><div><b>Pencil sketch</b><p>You draw it by hand, just like now. Photo or scan is enough to start.</p></div></div>
+                <div class="step"><div class="step-n">2</div><div><b>Ink &amp; color</b><p>Your finished line work becomes the panel — no redrawing for the app.</p></div></div>
+                <div class="step"><div class="step-n">3</div><div><b>Drop it in</b><p>Each page is sliced into panels that fit a phone screen.</p></div></div>
+                <div class="step"><div class="step-n">4</div><div><b>Publish</b><p>Readers tap through, save favorites, and wait for next week.</p></div></div>
+              </div>
+              <div class="note">Extras you could add later: process photos, your cutouts in funny places, a shop link for ACEOs &amp; prints, and a page for Flip City / contest news.</div>
+              <button class="btn" style="margin-top:14px;width:100%" onclick="go('home')">Back to home</button>
+            </section>
+          </div>
+
+          <nav class="bottom-nav" aria-label="App sections">
+            <button class="nav-btn on" data-go="home" onclick="go('home')"><span>⌂</span>Home</button>
+            <button class="nav-btn" data-go="library" onclick="go('library')"><span>▦</span>Library</button>
+            <button class="nav-btn" data-go="reader" onclick="go('reader')"><span>▭</span>Read</button>
+            <button class="nav-btn" data-go="cast" onclick="go('cast')"><span>☺</span>Cast</button>
+          </nav>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:12px"><button class="btn light small" onclick="go('extras')">✦ See “Behind the Ink” extras view →</button></p>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2>How it would work when your drawing is finished</h2>
+    <p class="sub">You don't need to learn to code or redraw anything for a phone. You finish the cartoon the way you always do — the app is just the frame around it.</p>
+    <div class="steps">
+      <article class="step-card"><div class="no">Step 1</div><h3>You draw</h3><p>Pencil, ink, watercolor — on paper. Take a clear photo or scan when you're happy with it.</p></article>
+      <article class="step-card"><div class="no">Step 2</div><h3>We drop it in</h3><p>Each page becomes tap-through panels, sized for phones, with your titles, captions, and character names.</p></article>
+      <article class="step-card"><div class="no">Step 3</div><h3>Readers read</h3><p>They open the app, pick an episode, and tap through panel by panel — and can follow you for the next one.</p></article>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:6px">
+    <div class="split">
+      <div class="panel-box">
+        <h3>What readers get</h3>
+        <ul>
+          <li>A cozy place to read all your strips in order</li>
+          <li>New-episode alerts when you post</li>
+          <li>Character pages so they remember who's who</li>
+          <li>Favorites they can re-read and share</li>
+        </ul>
+      </div>
+      <div class="panel-box red">
+        <h3>What you get</h3>
+        <ul>
+          <li>Your work in one place — not scattered across posts</li>
+          <li>A link you can put on your portfolio, eBay, and table at EBABZ</li>
+          <li>Room to grow: shop, behind-the-scenes, and contest pieces</li>
+          <li>Your name on it: Adams Red Ink, front and center</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:6px">
+    <h2>Questions you might have</h2>
+    <div class="faq" style="margin-top:14px">
+      <details><summary>Do I need the drawing finished to start?</summary><p>No — that's the point of this example. The structure can be ready first, like an empty picture frame. Your finished drawing is the last piece that goes in.</p></details>
+      <details><summary>Would my hand-drawn style stay hand-drawn?</summary><p>Yes. The panels in this example are plain placeholders on purpose. In the real version they'd be photos/scans of your actual pencil, ink, and color — nothing redrawn by a computer.</p></details>
+      <details><summary>Could this connect to my other work?</summary><p>Yes — the same app could link out to your ACEO listings, your portfolio, and festival tables, so a reader who loves a strip can find the original art.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <span>Example made for Rosa · Adams Red Ink — San Francisco illustrator &amp; cartoonist</span>
+  <span class="hand" style="font-size:18px;color:var(--red)">Finish the drawing when you're ready — the frame will be waiting. ✎</span>
+</footer>
+
+<script>
+const scenes = {
+  bubble: `<svg viewBox="0 0 340 190" width="100%" role="img" aria-label="Placeholder drawing of a girl blowing a bubble"><rect width="340" height="190" fill="#fffdf6"/><circle cx="215" cy="78" r="48" fill="#dbeafe" stroke="#1c1714" stroke-width="3"/><circle cx="200" cy="62" r="10" fill="white" opacity=".9"/><circle cx="92" cy="118" r="28" fill="#ffc531" stroke="#1c1714" stroke-width="3"/><circle cx="84" cy="110" r="4" fill="#1c1714"/><circle cx="100" cy="110" r="4" fill="#1c1714"/><path d="M82 126 Q92 134 102 126" fill="none" stroke="#1c1714" stroke-width="3" stroke-linecap="round"/><path d="M110 108 L168 86" stroke="#1c1714" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/><path d="M20 165 H320" stroke="#1c1714" stroke-width="3" stroke-linecap="round"/><text x="18" y="28" font-family="Patrick Hand" font-size="15" fill="#888">your drawing will go here ✎</text></svg>`,
+  bus: `<svg viewBox="0 0 340 190" width="100%" role="img" aria-label="Placeholder drawing of a city bus"><rect width="340" height="190" fill="#fffdf6"/><rect x="48" y="48" width="230" height="92" rx="16" fill="#fef08a" stroke="#1c1714" stroke-width="3"/><rect x="66" y="64" width="42" height="30" rx="6" fill="#bae6fd" stroke="#1c1714" stroke-width="2.5"/><rect x="118" y="64" width="42" height="30" rx="6" fill="#bae6fd" stroke="#1c1714" stroke-width="2.5"/><rect x="170" y="64" width="42" height="30" rx="6" fill="#bae6fd" stroke="#1c1714" stroke-width="2.5"/><circle cx="92" cy="145" r="16" fill="#1c1714"/><circle cx="232" cy="145" r="16" fill="#1c1714"/><path d="M20 168 H320" stroke="#1c1714" stroke-width="3"/><text x="18" y="28" font-family="Patrick Hand" font-size="15" fill="#888">your drawing will go here ✎</text></svg>`,
+  can: `<svg viewBox="0 0 340 190" width="100%" role="img" aria-label="Placeholder drawing of a paper character by a soda can"><rect width="340" height="190" fill="#fffdf6"/><rect x="190" y="38" width="72" height="118" rx="12" fill="#fca5a5" stroke="#1c1714" stroke-width="3"/><ellipse cx="226" cy="42" rx="36" ry="10" fill="#e5e7eb" stroke="#1c1714" stroke-width="2.5"/><rect x="92" y="72" width="52" height="72" rx="6" fill="white" stroke="#1c1714" stroke-width="3"/><circle cx="118" cy="96" r="10" fill="#ffc531" stroke="#1c1714" stroke-width="2"/><path d="M104 122 H132 M108 132 H128" stroke="#1c1714" stroke-width="2.5" stroke-linecap="round"/><path d="M20 168 H320" stroke="#1c1714" stroke-width="3"/><text x="18" y="28" font-family="Patrick Hand" font-size="15" fill="#888">your cutout photo could go here ✎</text></svg>`,
+  gallery: `<svg viewBox="0 0 340 190" width="100%" role="img" aria-label="Placeholder drawing of a gallery wall"><rect width="340" height="190" fill="#fffdf6"/><rect x="36" y="36" width="78" height="96" fill="#dbeafe" stroke="#1c1714" stroke-width="3"/><rect x="132" y="52" width="78" height="80" fill="#fecdd3" stroke="#1c1714" stroke-width="3"/><rect x="228" y="36" width="78" height="96" fill="#bbf7d0" stroke="#1c1714" stroke-width="3"/><circle cx="75" cy="78" r="16" fill="#ffc531" stroke="#1c1714" stroke-width="2"/><path d="M148 108 L170 82 L192 108" fill="none" stroke="#1c1714" stroke-width="3"/><path d="M20 168 H320" stroke="#1c1714" stroke-width="3"/><text x="18" y="24" font-family="Patrick Hand" font-size="15" fill="#888">your drawing will go here ✎</text></svg>`,
+  cafe: `<svg viewBox="0 0 340 190" width="100%" role="img" aria-label="Placeholder drawing of a café table with cake and coffee"><rect width="340" height="190" fill="#fffdf6"/><ellipse cx="170" cy="148" rx="110" ry="12" fill="#fde68a" stroke="#1c1714" stroke-width="2.5"/><path d="M120 92 h72 v34 a18 18 0 0 1 -18 18 h-36 a18 18 0 0 1 -18-18 z" fill="white" stroke="#1c1714" stroke-width="3"/><path d="M192 100 q28 6 0 28" fill="none" stroke="#1c1714" stroke-width="3"/><path d="M138 78 q8-10 0-20 M158 78 q8-10 0-20" stroke="#999" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="222" y="104" width="52" height="36" rx="6" fill="#fda4af" stroke="#1c1714" stroke-width="3"/><text x="18" y="28" font-family="Patrick Hand" font-size="15" fill="#888">your drawing will go here ✎</text></svg>`,
+  bigbubble: `<svg viewBox="0 0 340 190" width="100%" role="img" aria-label="Placeholder drawing of a giant bubble over the city"><rect width="340" height="190" fill="#fffdf6"/><circle cx="170" cy="88" r="62" fill="#dbeafe" stroke="#1c1714" stroke-width="3"/><circle cx="148" cy="66" r="12" fill="white" opacity=".9"/><path d="M30 168 L70 118 L105 168 M115 168 L155 104 L195 168 M205 168 L245 122 L285 168" fill="none" stroke="#1c1714" stroke-width="3" stroke-linejoin="round"/><text x="18" y="28" font-family="Patrick Hand" font-size="15" fill="#888">your drawing will go here ✎</text></svg>`
+};
+const episodes = [
+  {id:0,title:"The Bus That Wouldn't Wait",tag:"city",emoji:"🚌",meta:"City life · 4 panels · 2 min",desc:"A dash for the bus turns into a tour of the whole neighborhood.",
+   panels:[
+     {scene:"bus",bubble:"“Wait — that's my bus!”",caption:"Mina spots her bus pulling away — sketchbook in one hand, coffee in the other."},
+     {scene:"cafe",bubble:"“Okay. Plan B: walk.”",caption:"She stops for a breath (and a slice of cake) and decides the walk might be the better story."},
+     {scene:"gallery",bubble:"“I've never noticed this street…”",caption:"On foot, she passes a tiny gallery window she's rushed past a hundred times."},
+     {scene:"bubble",bubble:"“Best missed bus ever.”",caption:"She arrives late, happy, and with three new ideas in her sketchbook. The end."}
+   ]},
+  {id:1,title:"Blubb! A Very Bubbly Day",tag:"silly",emoji:"🫧",meta:"Silly · 4 panels · 2 min",desc:"One tiny bubble. One very big adventure.",
+   panels:[
+     {scene:"bubble",bubble:"“Just one little bubble…”",caption:"At the bus stop, Mina blows a single, perfect bubble. Blubb."},
+     {scene:"bigbubble",bubble:"“Uh oh. It's still growing.”",caption:"The bubble grows… and grows… until it's bigger than the bus stop itself."},
+     {scene:"bigbubble",bubble:"“My sketchbook! Come back!”",caption:"Pop? No — float! The bubble lifts her sketchbook gently over the rooftops."},
+     {scene:"gallery",bubble:"“Okay, that was kind of wonderful.”",caption:"It lands, soft as a sigh, right at her feet. Some days, the city plays back. The end."}
+   ]},
+  {id:2,title:"Soda Can Surprise",tag:"cozy",emoji:"🥤",meta:"Cozy · Cutouts · 4 panels",desc:"A tiny paper character explores a very big kitchen.",
+   panels:[
+     {scene:"can",bubble:"“Hello, giant soda can.”",caption:"Pip the paper cutout wakes up next to something enormous, red, and fizzy."},
+     {scene:"can",bubble:"“You are… a mountain.”",caption:"Every adventure starts with a climb — even one made of tin."},
+     {scene:"cafe",bubble:"“Worth it for the view.”",caption:"From the top, the whole kitchen looks like a city at sunrise."},
+     {scene:"gallery",bubble:"“Same time tomorrow?”",caption:"Pip slides home for dinner, already planning the next expedition. The end."}
+   ]},
+  {id:3,title:"Gallery Day",tag:"cozy",emoji:"🖼️",meta:"Cozy · Art day · 4 panels",desc:"A quiet afternoon, three paintings, and one familiar face.",
+   panels:[
+     {scene:"gallery",bubble:"“Just one quiet hour…”",caption:"Mina slips into the gallery with no plan except to look, slowly."},
+     {scene:"gallery",bubble:"“Wait — I know that line…”",caption:"In the third frame, a line so familiar it feels like an old friend."},
+     {scene:"cafe",bubble:"“That's what I want to make.”",caption:"Over tea afterward, she sketches what she saw — from memory, in red ink."},
+     {scene:"bubble",bubble:"“Okay. Back to my drawing board.”",caption:"Inspired, not copied. That's the whole secret. The end."}
+   ]}
+];
+const characters = [
+  {emoji:"👧🏽",bg:"#ffef9f",name:"Mina",role:"The daydreamer",detail:"Mina is your example lead — sketchbook always in hand, always five minutes late because she stopped to look at something. Swap in your real hero when your drawing is done."},
+  {emoji:"🧢",bg:"#bae6fd",name:"Theo",role:"The bus-stop philosopher",detail:"Theo appears whenever someone needs one good sentence at exactly the right moment. Usually holding coffee. Usually right."},
+  {emoji:"✂️",bg:"#fecdd3",name:"Pip",role:"The paper cutout",detail:"Pip is tiny, brave, and made of paper — a nod to your cutout photos in unexpected places. Pip's episodes can mix drawing and photos."},
+  {emoji:"🐈",bg:"#bbf7d0",name:"Biscuit",role:"The café cat",detail:"Biscuit says nothing, judges gently, and steals every scene he's in. Every good cartoon needs a Biscuit."}
+];
+let currentEp = 1, currentPanel = 0, liked = new Set();
+function epCard(ep){
+  return `<button class="ep" onclick="openEpisode(${ep.id})"><div class="thumb">${ep.emoji}</div><div style="flex:1;min-width:0"><b>${ep.title}</b><small>${ep.meta}</small></div><span class="num">EP ${ep.id+1} ›</span></button>`;
+}
+document.getElementById('homeList').innerHTML = episodes.slice(1).map(epCard).join('');
+document.getElementById('libraryList').innerHTML = episodes.map(epCard).join('');
+document.getElementById('featuredArt').innerHTML = scenes.bigbubble;
+function go(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el=document.getElementById('view-'+name); if(el) el.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('on', b.dataset.go===name));
+  document.getElementById('scrollArea').scrollTop=0;
+}
+function openEpisode(id){ currentEp=id; currentPanel=0; renderReader(); go('reader'); }
+function renderReader(){
+  const ep=episodes[currentEp]; const p=ep.panels[currentPanel];
+  document.getElementById('readerTitle').textContent=ep.title;
+  document.getElementById('panelArt').innerHTML=scenes[p.scene]||scenes.bubble;
+  document.getElementById('panelBubble').textContent=p.bubble;
+  document.getElementById('panelCaption').textContent=p.caption;
+  document.getElementById('panelCounter').textContent=`Panel ${currentPanel+1} / ${ep.panels.length}`;
+  document.getElementById('dots').innerHTML=ep.panels.map((_,i)=>`<i class="${i===currentPanel?'on':''}"></i>`).join('');
+  document.getElementById('prevBtn').style.opacity=currentPanel===0?.45:1;
+  document.getElementById('nextBtn').textContent=currentPanel===ep.panels.length-1?'Finish ✓':'Next panel →';
+  const likeBtn=document.getElementById('likeBtn');
+  likeBtn.classList.toggle('liked', liked.has(currentEp));
+  likeBtn.innerHTML=liked.has(currentEp)?'♥ &nbsp;Loved!':'♡ &nbsp;Love it';
+  document.getElementById('readerMsg').textContent='';
+}
+function movePanel(dir){
+  const ep=episodes[currentEp];
+  if(dir>0 && currentPanel===ep.panels.length-1){ finishEpisode(); return; }
+  currentPanel=Math.max(0,Math.min(ep.panels.length-1,currentPanel+dir));
+  renderReader();
+}
+function toggleLike(){ liked.has(currentEp)?liked.delete(currentEp):liked.add(currentEp); renderReader(); if(liked.has(currentEp)) document.getElementById('readerMsg').textContent='Saved to your favorites ♥'; }
+function finishEpisode(){ document.getElementById('readerMsg').textContent='You finished it! In the real app, the next episode would be waiting right here.'; }
+document.getElementById('chips').addEventListener('click',e=>{
+  const btn=e.target.closest('.chip'); if(!btn) return;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); btn.classList.add('on');
+  const f=btn.dataset.filter;
+  const list=f==='all'?episodes:episodes.filter(ep=>ep.tag===f);
+  document.getElementById('libraryList').innerHTML=list.length?list.map(epCard).join(''):'<p style="font-weight:700;color:var(--ink2)">No example episodes in that shelf yet.</p>';
+});
+function renderChars(){
+  document.getElementById('charGrid').innerHTML=characters.map((c,i)=>`<button class="char" onclick="showChar(${i})"><div class="face" style="background:${c.bg}">${c.emoji}</div><b>${c.name}</b><small>${c.role}</small></button>`).join('');
+  showChar(0);
+}
+function showChar(i){ const c=characters[i]; document.getElementById('charDetail').innerHTML=`<h3>${c.emoji} ${c.name} — ${c.role}</h3><p>${c.detail}</p>`; }
+renderChars(); renderReader();
+</script>
+</body>
+</html>
